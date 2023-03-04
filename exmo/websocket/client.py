@@ -1,10 +1,12 @@
-import logging
 import asyncio
 import time
+import base64
 import hashlib
 import hmac
-import base64
+import logging
+
 import websockets
+
 from typing import Dict, Any, Callable
 
 
