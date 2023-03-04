@@ -46,7 +46,7 @@ asyncio.run(main())
 
 Таким образом, этот код позволяет подключаться к публичному API Exmo и получать данные о сделках и котировках.
 
-### Работа с приватными и публичными данными
+### Работа с приватными данными
 ```python
 # Private data
 import asyncio
@@ -71,6 +71,46 @@ async def main():
     client = Client(my_handler)
     task = asyncio.create_task(client.listen(data))
     await asyncio.gather(task)
+
+asyncio.run(main())
+```
+### Работа с приватными и публичными данными
+```python
+# Public and private data
+import asyncio
+import os
+from exmo import Client
+
+
+# Реализуйте свой обработчик полученных данных
+async def my_handler(response):
+    print(response)
+
+
+async def main():
+    data_public = {
+        "url": "wss://ws-api.exmo.com:443/v1/public",
+        "init_messages": (
+            '{"id":1,"method":"subscribe","topics":["spot/trades:BTC_USDT","spot/ticker:BTC_USDT"]}',
+        )
+    }
+
+    api_key = os.getenv('API_KEY')
+    secret_key = os.getenv('SECRET_KEY')
+    data_privet = {
+        "url": "wss://ws-api.exmo.com:443/v1/private",
+        "init_messages": (
+            Client.create_login_message(api_key, secret_key),
+            '{"id":1,"method":"subscribe","topics":["spot/wallet"]}',
+        )
+    }
+
+    client = Client(my_handler)
+    tasks = [
+        asyncio.create_task(client.listen(data_public)),
+        asyncio.create_task(client.listen(data_privet))
+    ]
+    await asyncio.gather(*tasks)
 
 asyncio.run(main())
 ```
