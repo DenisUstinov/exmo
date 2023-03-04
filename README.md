@@ -4,7 +4,7 @@
 ## Установка
 Вы можете установить exmo с помощью pip из GitHub, выполнив следующую команду:
 ```bash
-pip install git+https://github.com/DenisUstinov/exmo.git
+pip install git+https://github.com/DenisUstinov/exmo.git --use-pep517
 ```
 
 ## Пример использования
