@@ -18,8 +18,13 @@ class Client:
                 await websocket.send(message)
 
             while True:
-                string = await websocket.recv()
-                response = json.loads(string)
+                try:
+                    response = await websocket.recv()
+                except websockets.exceptions.ConnectionClosed as e:
+                    raise Exception("WebSocket connection closed unexpectedly") from e
+                except Exception as e:
+                    raise Exception("WebSocket error occurred") from e
+
                 await self.response_handler(response)
 
     @staticmethod
