@@ -7,11 +7,11 @@ import logging
 
 import websockets
 
-from typing import Dict, Any, Callable
+from typing import Dict, Any, Callable, Coroutine
 
 
 class Client:
-    def __init__(self, response_handler: Callable[[str], None]) -> None:
+    def __init__(self, response_handler: Callable[[str], Coroutine]) -> None:
         self.response_handler = response_handler
         self.logger = logging.getLogger(__name__)
 
