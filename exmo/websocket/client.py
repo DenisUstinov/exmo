@@ -1,3 +1,4 @@
+import asyncio
 import time
 import hashlib
 import hmac
@@ -11,19 +12,28 @@ class Client:
         self.response_handler = response_handler
 
     async def listen(self, data: Dict[str, Any]) -> None:
-        async with websockets.connect(data['url']) as websocket:
-            for message in data['init_messages']:
-                await websocket.send(message)
+        reconnect_delay = 5  # начальная задержка
+        while True:
+            try:
+                async with websockets.connect(data['url']) as websocket:
+                    for message in data['init_messages']:
+                        await websocket.send(message)
 
-            while True:
-                try:
-                    response = await websocket.recv()
-                except websockets.exceptions.ConnectionClosed as e:
-                    raise Exception("WebSocket connection closed unexpectedly") from e
-                except Exception as e:
-                    raise Exception("WebSocket error occurred") from e
+                    while True:
+                        try:
+                            response = await websocket.recv()
+                        except websockets.exceptions.ConnectionClosed as e:
+                            raise Exception("WebSocket connection closed unexpectedly") from e
+                        except Exception as e:
+                            raise Exception("WebSocket error occurred") from e
 
-                await self.response_handler(response)
+                        await self.response_handler(response)
+            except Exception as e:
+                print(f"WebSocket connection error: {e}")
+                print(f"Reconnecting in {reconnect_delay} seconds...")
+                await asyncio.sleep(reconnect_delay)
+                reconnect_delay *= 2  # увеличение задержки на следующий раз
+                raise  # передача исключения выше по стеку
 
     @staticmethod
     def create_login_message(api_key: str, secret_key: str) -> str:
