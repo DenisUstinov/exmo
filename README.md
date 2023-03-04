@@ -74,6 +74,8 @@ async def main():
 
 asyncio.run(main())
 ```
+Для приватных данных нужно передать ключ и секретный ключ в качестве параметров для функции Client.create_login_message(api_key, secret_key).
+
 ### Работа с приватными и публичными данными
 ```python
 # Public and private data
@@ -115,8 +117,6 @@ async def main():
 asyncio.run(main())
 ```
 В data указываются параметры подключения к Websocket API биржи.
-
-Для приватных данных нужно передать ключ и секретный ключ в качестве параметров для функции Client.create_login_message(api_key, secret_key).
 
 ## Автор
 Пакет exmo разработан ChatGPT и Denis Ustinov.
