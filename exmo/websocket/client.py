@@ -23,7 +23,7 @@ class Client:
                 await self.response_handler(response)
 
     @staticmethod
-    async def create_login_message(api_key, secret_key):
+    def create_login_message(api_key, secret_key):
         nonce = str(time.time_ns())
         sign = hmac.new(secret_key.encode('utf8'), (api_key + nonce).encode('utf8'), hashlib.sha512).digest()
         sign = base64.b64encode(sign).decode('utf8')
