@@ -64,7 +64,7 @@ async def main():
         "url": "wss://ws-api.exmo.com:443/v1/private",
         "init_messages": (
             Client.create_login_message(api_key, secret_key),
-            '{"id":1,"method":"subscribe","topics":["spot/orders","spot/user_trades", "spot/trades:BTC_USD", "spot/ticker:LTC_USD"]}',
+            '{"id":1,"method":"subscribe","topics":["spot/orders","spot/user_trades"]}',
         )
     }
 
