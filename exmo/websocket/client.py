@@ -14,7 +14,7 @@ class Client:
     def __init__(self, response_handler: Callable[[str], Coroutine]) -> None:
         self.response_handler = response_handler
 
-    @backoff.on_exception(backoff.expo, websockets.exceptions.WebSocketException, max_tries=5, interval=1)
+    @backoff.on_exception(backoff.expo, websockets.exceptions.WebSocketException, max_tries=5)
     async def listen(self, data: Dict[str, Any]) -> None:
         async with websockets.connect(data['url']) as websocket:
             for message in data.get('init_messages', []):
