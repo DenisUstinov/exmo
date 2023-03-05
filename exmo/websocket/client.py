@@ -3,6 +3,7 @@ import base64
 import hashlib
 import hmac
 
+import backoff
 import websockets
 
 from typing import Dict, Any, Callable, Coroutine
@@ -12,6 +13,7 @@ class Client:
     def __init__(self, response_handler: Callable[[str], Coroutine]) -> None:
         self.response_handler = response_handler
 
+    @backoff.on_exception(backoff.expo, websockets.exceptions, max_tries=5, interval=1)
     async def listen(self, data: Dict[str, Any]) -> None:
         async with websockets.connect(data['url']) as websocket:
             for message in data.get('init_messages', []):
