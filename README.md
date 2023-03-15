@@ -14,7 +14,7 @@ pip install git+https://github.com/DenisUstinov/exmo.git --use-pep517
 ```python
 # Public data
 import asyncio
-from exmo import Client
+from exmo.websocket import Client
 
 # Реализуйте свой обработчик полученных данных
 async def my_handler(response):
@@ -51,7 +51,7 @@ asyncio.run(main())
 # Private data
 import asyncio
 import os
-from exmo import Client
+from exmo.websocket import Client
 
 # Реализуйте свой обработчик полученных данных
 async def my_handler(response):
@@ -81,7 +81,7 @@ asyncio.run(main())
 # Public and private data
 import asyncio
 import os
-from exmo import Client
+from exmo.websocket import Client
 
 
 # Реализуйте свой обработчик полученных данных
@@ -90,10 +90,17 @@ async def my_handler(response):
 
 
 async def main():
-    data_public = {
+    data_public_1 = {
         "url": "wss://ws-api.exmo.com:443/v1/public",
         "init_messages": (
-            '{"id":1,"method":"subscribe","topics":["spot/trades:BTC_USDT","spot/ticker:BTC_USDT"]}',
+            '{"id":1,"method":"subscribe","topics":["spot/trades:BTC_USDT"]}',
+        )
+    }
+    
+    data_public_2 = {
+        "url": "wss://ws-api.exmo.com:443/v1/public",
+        "init_messages": (
+            '{"id":1,"method":"subscribe","topics":["spot/ticker:BTC_USDT"]}',
         )
     }
 
@@ -109,7 +116,8 @@ async def main():
 
     client = Client(my_handler)
     tasks = [
-        asyncio.create_task(client.listen(data_public)),
+        asyncio.create_task(client.listen(data_public_1)),
+        asyncio.create_task(client.listen(data_public_2)),
         asyncio.create_task(client.listen(data_privet))
     ]
     await asyncio.gather(*tasks)

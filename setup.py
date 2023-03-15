@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='exmo',
-    version='0.2.1',
+    version='0.2.2',
     author='ChatGPT and Denis Ustinov',
     author_email='revers-06-checkup@icloud.com',
     description='A Python package for working with Exmo API',
