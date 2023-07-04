@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='exmo',
-    version='0.2.7',
+    version='0.2.8',
     author='ChatGPT and Denis Ustinov',
     author_email='revers-06-checkup@icloud.com',
     description='A Python package for working with Exmo API',
@@ -11,7 +11,7 @@ setup(
     url='https://github.com/DenisUstinov/exmo',
     license='MIT',
     packages=find_packages(),
-    install_requires=['websockets', 'backoff'],
+    install_requires=['websockets', 'backoff', 'aiohttp'],
     python_requires='>=3.6',
     classifiers=[
         'Development Status :: 3 - Alpha',
