@@ -2,10 +2,13 @@ import json
 import backoff
 import aiohttp
 
+from typing import Callable, Coroutine
+
 
 class Client:
-    def __init__(self) -> None:
+    def __init__(self, response_handler: Callable[[dict], Coroutine]) -> None:
         self.session = aiohttp.ClientSession()
+        # self.response_handler = response_handler
 
     @backoff.on_exception(backoff.expo, aiohttp.ClientError, max_tries=5)
     async def request(self, url: str, method: str = 'GET', headers: dict = None, data: dict = None) -> dict:
@@ -19,11 +22,11 @@ class Client:
         except aiohttp.ClientError as e:
             raise ValueError(f'Error fetching {url}: {str(e)}')
 
-    async def close(self):
-        await self.session.close()
-
-    async def __aenter__(self):
-        return self
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await self.close()
+    # async def close(self):
+    #     await self.session.close()
+    #
+    # async def __aenter__(self):
+    #     return self
+    #
+    # async def __aexit__(self, exc_type, exc_val, exc_tb):
+    #     await self.close()

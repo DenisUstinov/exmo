@@ -1,13 +1,12 @@
 class Controller:
     def __init__(self, actions):
         self.actions = actions
-        self.api_websocket_state = {}
 
     async def __call__(self, data):
         event = data.get('event')
         try:
             if event in ['info', 'subscribed', 'unsubscribed', 'error', 'logger_in']:
-                self.api_websocket_state[event] = data
+                self.actions.api_websocket_state[event] = data
             elif event in ['snapshot', 'update']:
                 topic = data.get('topic')
                 if topic == 'spot/user_trades':
